@@ -8,8 +8,7 @@ class BotMailChimp:
 		#start client
 		self.client = MailChimp('alexroan', self.api_key)
 	
-	def get_origins_subscriptions(self):
-		
+	def get_origins_subscriptions(self):		
 		all_lists = self.client.lists.all(get_all=True, fields="lists.name,lists.id")
 
 		#find the subscriptions lit
