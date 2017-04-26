@@ -4,9 +4,10 @@ from mailchimp3 import MailChimp
 class BotMailChimp:
 
 	def __init__(self):
+		self.api_username = os.environ['MAILCHIMP_USERNAME']
 		self.api_key = os.environ['MAILCHIMP_API_KEY']
 		#start client
-		self.client = MailChimp('alexroan', self.api_key)
+		self.client = MailChimp(self.api_username, self.api_key)
 	
 	def get_origins_subscriptions(self):		
 		all_lists = self.client.lists.all(get_all=True, fields="lists.name,lists.id")
