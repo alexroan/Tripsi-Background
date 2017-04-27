@@ -1,4 +1,4 @@
-import os, json
+import os, json, operator
 from flight_checker import FlightChecker
 from flight_classes import SearchParameters
 
@@ -26,6 +26,7 @@ class BotSkyscanner:
 	def browse_origins(self, origin_keys):
 		origin_results = {}
 		for origin_key in origin_keys:
+			print("Search with origin: %s" % origin_key)
 			origin = self.parse_origin_key(origin_key)
 			if origin is None:
 				print('origin is none, moving to next')
@@ -41,9 +42,18 @@ class BotSkyscanner:
                                  earliest_ret_time=self.earliest_ret_time,
                                  latest_ret_time=self.latest_ret_time,
                                  adults=self.adults)
-			browse_results = self.flight_checker.browse_cache_by_route(search_params)
-			print(json.dumps(browse_results))
 
+			cheapest_distinct_city_flights = list()
+			browse_results = self.flight_checker.browse_cache_by_route_advenchas(search_params)
+			for dest_key in browse_results:
+				browse_results[dest_key].sort(key=operator.attrgetter("price"), reverse=False)
+				cheapest_distinct_city_flights.append(browse_results[dest_key][0])
+			cheapest_distinct_city_flights.sort(key=operator.attrgetter("price"), reverse=False)
+			
+			origin_results[origin_key] = list()
+			for flight in cheapest_distinct_city_flights[:3]:
+				origin_results[origin_key].append(flight)
+		return origin_results
 
 	#use raw input from mailchimp origin and try to obtain
 	#its skyscanner code e.g. 'CWL'

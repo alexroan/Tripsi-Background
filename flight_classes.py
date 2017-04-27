@@ -122,5 +122,5 @@ class CacheAdventure:
         return s
     
     def basic_str(self):
-        return str(self.departure_place)+" to "+str(self.return_place)+"\t"+str(self.departure_date)+"-"+str(self.return_date)+"\n"  
+        return str(self.departure_place)+" to "+str(self.return_place)+"\t"+str(self.departure_date)+"-"+str(self.return_date)+" Price: £"+str(self.price)
     

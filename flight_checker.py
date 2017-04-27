@@ -163,6 +163,70 @@ class FlightChecker:
             cache_results.append(result)
             i += 1
         return cache_results
+
+    def browse_cache_by_route_advenchas(self, search_params):
+        i = 0 
+        cache_results = {}
+        while i < len(search_params.departure_dates):
+            departure_date = search_params.departure_dates[i]
+            return_date = search_params.return_dates[i]
+            try:    
+                result = self.flights_cache.get_cheapest_price_by_route(
+                                market=self.market,
+                                currency=self.currency,
+                                locale=self.locale,
+                                originplace=search_params.origin,
+                                destinationplace=search_params.destination,
+                                outbounddate=departure_date.strftime('%Y-%m-%d'),
+                                inbounddate=return_date.strftime('%Y-%m-%d')
+                                ).parsed
+            except Exception as exc:
+                print('ERROR: Could not access browse cache by route')
+                continue
+
+            quotes = result['Quotes']
+            carriers = result['Carriers']
+            places = result['Places']
+            for quote in quotes:
+                min_price = quote['MinPrice']
+                direct = quote['Direct']
+                price = quote['MinPrice']
+                cache_date = quote['QuoteDateTime']
+                
+                dept = quote['OutboundLeg']
+                ret = quote['InboundLeg']
+                
+                dept_date = dept['DepartureDate']
+                dept_place_details = self.get_place_details(places, dept['OriginId'])
+                dept_place = dept_place_details[0]
+                dept_iata = dept_place_details[1]
+                dept_carriers = self.get_carrier_names(carriers, dept)
+                
+                ret_date = ret['DepartureDate']
+                ret_place_details = self.get_place_details(places, ret['OriginId'])
+                ret_place = ret_place_details[0]
+                ret_iata = ret_place_details[1]
+                ret_carriers = self.get_carrier_names(carriers, ret)
+                
+                advencha = CacheAdventure(
+                                     price=price, 
+                                     direct=direct, 
+                                     dept_date=dept_date, 
+                                     dept_place=dept_place, 
+                                     dept_iata=dept_iata, 
+                                     dept_carriers=dept_carriers, 
+                                     ret_date=ret_date, 
+                                     ret_place=ret_place, 
+                                     ret_iata=ret_iata, 
+                                     ret_carriers=ret_carriers, 
+                                     cache_date=cache_date
+                                     )
+                if ret_place in cache_results:
+                    cache_results[ret_place].append(advencha)
+                else:
+                    cache_results[ret_place] = [advencha]
+            i += 1
+        return cache_results
     
     #TODO Use this. How to return results though?
     #Either as is, then parse 'Quotes'
