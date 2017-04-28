@@ -299,7 +299,7 @@ class FlightChecker:
         return
     
      
-    def retrieve_adventure_details(self, adventure, adults, max_price_pp, earliest_dept_time, latest_dept_time, earliest_ret_time, latest_ret_time):     
+    def live_flights_query(self, adventure, adults, max_price_pp, earliest_dept_time, latest_dept_time, earliest_ret_time, latest_ret_time):     
         try:
             result = self.flights.get_result(
                                 country=self.market,

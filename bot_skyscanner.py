@@ -18,11 +18,12 @@ class BotSkyscanner:
 		self.ret_day=6
 		self.earliest_ret_time='10:00'
 		self.latest_ret_time='23:30'
-		self.max_price_pp=60.0
+		self.max_price_pp=100.0
 		self.adults=1
 		self.weeks_ahead=8
 
 	#takes a list of keys
+	#returns a dict of origin=>list(results)
 	def browse_origins(self, origin_keys):
 		origin_results = {}
 		for origin_key in origin_keys:
@@ -54,6 +55,11 @@ class BotSkyscanner:
 			for flight in cheapest_distinct_city_flights[:3]:
 				origin_results[origin_key].append(flight)
 		return origin_results
+		
+	def live_pricing(self, advencha):
+		live_result = self.flight_checker.live_flights_query(advencha, self.adults, self.max_price_pp,
+			self.earliest_dept_time, self.latest_dept_time, self.earliest_ret_time, self.latest_ret_time)
+		print(str(live_result))
 
 	#use raw input from mailchimp origin and try to obtain
 	#its skyscanner code e.g. 'CWL'
