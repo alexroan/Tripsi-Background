@@ -18,7 +18,7 @@ class BotSkyscanner:
 		self.ret_day=6
 		self.earliest_ret_time='10:00'
 		self.latest_ret_time='23:30'
-		self.max_price_pp=100.0
+		self.max_price_pp=200.0
 		self.adults=1
 		self.weeks_ahead=8
 
@@ -59,7 +59,10 @@ class BotSkyscanner:
 	def live_pricing(self, advencha):
 		live_result = self.flight_checker.live_flights_query(advencha, self.adults, self.max_price_pp,
 			self.earliest_dept_time, self.latest_dept_time, self.earliest_ret_time, self.latest_ret_time)
-		print(str(live_result))
+		return live_result
+
+	def parse_live_price(self, result):
+		return self.flight_checker.parse_live_price(result, self.adults, self.max_price_pp)
 
 	#use raw input from mailchimp origin and try to obtain
 	#its skyscanner code e.g. 'CWL'

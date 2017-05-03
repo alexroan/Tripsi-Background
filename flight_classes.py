@@ -83,6 +83,9 @@ class FlightItinerary:
         s+="Total price for "+str(self.adults)+" adults = "+str(self.price)+"\n"
         s+=str(self.link)+"\n\n"
         return s
+
+    def basic_str(self):
+        return str(self.dept_from)+" to "+str(self.dept_arrive_location)+"\tPrice: "+str(self.price)
         
 
 class CacheAdventure:
