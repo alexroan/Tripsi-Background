@@ -29,11 +29,13 @@ class BotMailChimp:
 		for member in members['members']:
 			if(member['status'] == 'subscribed'):
 				email_address = member['email_address']
+				currency = member['merge_fields']['CURRENCY']
+				user_details = {'email':email_address, 'currency':currency}
 				origin_airport = member['merge_fields']['ORIGIN']
 				if origin_airport not in origins_emails:
-					origins_emails[origin_airport] = [email_address]
+					origins_emails[origin_airport] = [user_details]
 				else:
-					origins_emails[origin_airport].append(email_address)
+					origins_emails[origin_airport].append(user_details)
 		return origins_emails
 
 	def test_campaign_retrieval(self, origin):

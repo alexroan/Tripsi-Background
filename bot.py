@@ -12,12 +12,22 @@ if origins is None:
 advenchas = []
 scanner = BotSkyscanner()
 browse_results = scanner.browse_origins(origins)
+
+#TODO - INSTEAD OF BELOW...
+#for each origin item, use key to get advenchas from browse_results
+#then, using the user details, send links with advencha details to each
+#INSTEAD OF BELOW...
 for result_origin in browse_results:
 	print('Cache browse results for origin: %s' % result_origin)
 	for advancha in browse_results[result_origin]:
 		print(advancha.basic_str())
 		advenchas.append(advancha)
 
+
+
+
+#Live approach not needed for now. Use browse results with referral links to take to skyscanner page first
+'''
 print('Gathered cache results. Now attempting to retrieve live data...')
 for advencha in advenchas:
 	print('Sleeping...')
@@ -29,3 +39,4 @@ for advencha in advenchas:
 	print('Live Pricing:')
 	for itinerary in parsed_result:
 		print(itinerary.basic_str())
+'''
