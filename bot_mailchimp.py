@@ -36,5 +36,21 @@ class BotMailChimp:
 					origins_emails[origin_airport].append(email_address)
 		return origins_emails
 
+	def test_campaign_retrieval(self, origin):
+		all_campaigns = self.client.campaigns.all(get_all=True)
+		if 'campaigns' in all_campaigns:
+			for campaign in all_campaigns['campaigns']:
+				if 'settings' in campaign:
+					settings = campaign['settings']
+					if 'title' in settings:
+						if settings['title'] == origin:
+							return campaign
+		return None
+
+	def get_email_template(self, template_id):
+		templates = self.client.templates.default_content.all(template_id=template_id)
+		return templates
+
+
 
 	
