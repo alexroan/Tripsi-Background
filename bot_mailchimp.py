@@ -24,7 +24,7 @@ class BotMailChimp:
 
 		#get origins and assign them as key in origins_emails
 		#value of each key is list of email associated with that origin
-		origins_emails = {}
+		origin_emails = {}
 		members = self.client.lists.members.all(li['id'], get_all=True)
 		for member in members['members']:
 			if(member['status'] == 'subscribed'):
@@ -32,11 +32,14 @@ class BotMailChimp:
 				currency = member['merge_fields']['CURRENCY']
 				user_details = {'email':email_address, 'currency':currency}
 				origin_airport = member['merge_fields']['ORIGIN']
-				if origin_airport not in origins_emails:
-					origins_emails[origin_airport] = [user_details]
+				if origin_airport not in origin_emails:
+					origin_emails[origin_airport] = {currency : [email_address]}
 				else:
-					origins_emails[origin_airport].append(user_details)
-		return origins_emails
+					if currency not in origin_emails[origin_airport]:
+						origin_emails[origin_airport][currency] = [email_address]
+					else:
+						origin_emails[origin_airport][currency].append(email_address)
+		return origin_emails
 
 	def test_campaign_retrieval(self, origin):
 		all_campaigns = self.client.campaigns.all(get_all=True)

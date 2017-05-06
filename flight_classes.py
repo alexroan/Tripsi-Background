@@ -8,7 +8,7 @@ import datetime
 
 class SearchParameters:
     
-    def __init__(self, origin, destination, max_price_pp, weekly_departure_day, weekly_return_day, weeks_ahead, earliest_dept_time, latest_dept_time, earliest_ret_time, latest_ret_time, adults):
+    def __init__(self, origin, destination, max_price_pp, weekly_departure_day, weekly_return_day, weeks_ahead, earliest_dept_time, latest_dept_time, earliest_ret_time, latest_ret_time, adults, currency):
         self.origin = origin
         self.destination = destination
         self.max_price_pp = max_price_pp
@@ -19,10 +19,14 @@ class SearchParameters:
         self.earliest_ret_time = earliest_ret_time
         self.latest_ret_time = latest_ret_time
         self.adults = adults
+        self.currency = currency
         
     def get_list_of_dates(self, day_in_week, weeks_ahead):
         dates = list()
         start_date = datetime.datetime.now()
+        #if currently a saturday, move to monday
+        if(start_date.weekday() == 5):
+            start_date = start_date + datetime.timedelta(days=2)
         d = start_date
         i = 0
         while i < weeks_ahead:

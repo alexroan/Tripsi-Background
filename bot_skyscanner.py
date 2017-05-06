@@ -22,17 +22,13 @@ class BotSkyscanner:
 		self.adults=1
 		self.weeks_ahead=8
 
-	#takes a list of keys
-	#returns a dict of origin=>list(results)
-	def browse_origins(self, origin_keys):
-		origin_results = {}
-		for origin_key in origin_keys:
-			print("Search with origin: %s" % origin_key)
-			origin = self.parse_origin_key(origin_key)
-			if origin is None:
-				print('origin is none, moving to next')
-				continue
-			search_params = SearchParameters(origin=origin,
+	def browse_origin(self, origin_key, currency):
+		print("Search with origin %s" % origin_key)
+		origin = self.parse_origin_key(origin_key)
+		if origin is None:
+			print('Could not parse origin, aborting this one')
+			return None
+		search_params = SearchParameters(origin=origin,
                                  destination=self.destination,
                                  max_price_pp=self.max_price_pp,
                                  weekly_departure_day=self.dept_day,
@@ -42,19 +38,15 @@ class BotSkyscanner:
                                  latest_dept_time=self.latest_dept_time,
                                  earliest_ret_time=self.earliest_ret_time,
                                  latest_ret_time=self.latest_ret_time,
-                                 adults=self.adults)
-
-			cheapest_distinct_city_flights = list()
-			browse_results = self.flight_checker.browse_cache_by_route_advenchas(search_params)
-			for dest_key in browse_results:
-				browse_results[dest_key].sort(key=operator.attrgetter("price"), reverse=False)
-				cheapest_distinct_city_flights.append(browse_results[dest_key][0])
-			cheapest_distinct_city_flights.sort(key=operator.attrgetter("price"), reverse=False)
-			
-			origin_results[origin_key] = list()
-			for flight in cheapest_distinct_city_flights[:3]:
-				origin_results[origin_key].append(flight)
-		return origin_results
+                                 adults=self.adults,
+                                 currency = currency)
+		cheapest_distinct_city_flights = list()
+		browse_results = self.flight_checker.browse_cache_by_route_advenchas(search_params)
+		for dest_key in browse_results:
+			browse_results[dest_key].sort(key=operator.attrgetter("price"), reverse=False)
+			cheapest_distinct_city_flights.append(browse_results[dest_key][0])
+		cheapest_distinct_city_flights.sort(key=operator.attrgetter("price"), reverse=False)
+		return cheapest_distinct_city_flights[:3]
 		
 	def live_pricing(self, advencha):
 		live_result = self.flight_checker.live_flights_query(advencha, self.adults, self.max_price_pp,

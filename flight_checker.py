@@ -83,7 +83,7 @@ class FlightChecker:
             try:    
                 result = self.flights_cache.get_cheapest_price_by_route(
                                 market=self.market,
-                                currency=self.currency,
+                                currency=search_params.currency,
                                 locale=self.locale,
                                 originplace=search_params.origin,
                                 destinationplace=search_params.destination,
