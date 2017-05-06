@@ -1,3 +1,5 @@
+emails/
+
 # File with login and password
 secret.txt
 
