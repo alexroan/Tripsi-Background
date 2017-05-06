@@ -37,6 +37,7 @@ class BotEmailParser:
 			xp = "//p[@id = 'location-%s-text']" % str(count)
 			find = etree.XPath(xp)
 			location_text = find(tree)[0]
+			#TODO display the dates of the advencha
 			location_text.text = "%s%s" % (currency_symbol, str(advencha.price))
 			xp = "//a[@id = 'location-%s-button']" % str(count)
 			find = etree.XPath(xp)

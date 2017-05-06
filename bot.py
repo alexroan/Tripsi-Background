@@ -14,7 +14,7 @@ advenchas = []
 scanner = BotSkyscanner()
 
 email_parser = BotEmailParser('templates/email_template.html')
-skyscanner_api_key_16 = scanner.browse_api_key[:16]
+skyscanner_api_key_16 = scanner.live_api_key[:16]
 
 for airport in origins:
 	for currency in origins[airport]:
@@ -26,11 +26,3 @@ for airport in origins:
 			file.close()
 		else:
 			print('advenchas is none')
-
-"""
-		print('Results for %s in %s' % (airport, currency))
-		if advenchas is not None:
-			for advencha in advenchas:
-				print(advencha.basic_str())
-"""
-
