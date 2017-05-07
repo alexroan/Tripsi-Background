@@ -24,8 +24,9 @@ class SearchParameters:
     def get_list_of_dates(self, day_in_week, weeks_ahead):
         dates = list()
         start_date = datetime.datetime.now()
-        #if currently a saturday, move to monday
-        if(start_date.weekday() == 5):
+        #if currently a saturday or sunday, move ahead two days
+        current_day = start_date.weekday()
+        if(current_day == 5 or current_day == 6):
             start_date = start_date + datetime.timedelta(days=2)
         d = start_date
         i = 0
