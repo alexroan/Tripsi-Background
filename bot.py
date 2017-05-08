@@ -24,5 +24,3 @@ for airport in origins:
 			file = open('emails/%s%s.html' % (airport, currency), "w")
 			file.write(email_result.decode("utf-8"))
 			file.close()
-		else:
-			print('advenchas is none')

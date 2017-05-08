@@ -111,30 +111,32 @@ class FlightChecker:
                 dept_place = dept_place_details[0]
                 dept_iata = dept_place_details[1]
                 dept_carriers = self.get_carrier_names(carriers, dept)
-                
+
                 ret_date = ret['DepartureDate']
                 ret_place_details = self.get_place_details(places, ret['OriginId'])
                 ret_place = ret_place_details[0]
                 ret_iata = ret_place_details[1]
                 ret_carriers = self.get_carrier_names(carriers, ret)
                 
-                advencha = CacheAdventure(
-                                     price=price, 
-                                     direct=direct, 
-                                     dept_date=dept_date, 
-                                     dept_place=dept_place, 
-                                     dept_iata=dept_iata, 
-                                     dept_carriers=dept_carriers, 
-                                     ret_date=ret_date, 
-                                     ret_place=ret_place, 
-                                     ret_iata=ret_iata, 
-                                     ret_carriers=ret_carriers, 
-                                     cache_date=cache_date
-                                     )
-                if ret_place in cache_results:
-                    cache_results[ret_place].append(advencha)
-                else:
-                    cache_results[ret_place] = [advencha]
+                #check that the return location is correct and flights are direct
+                if search_params.origin == dept_iata and direct == True:
+                    advencha = CacheAdventure(
+                                         price=price, 
+                                         direct=direct, 
+                                         dept_date=dept_date, 
+                                         dept_place=dept_place, 
+                                         dept_iata=dept_iata, 
+                                         dept_carriers=dept_carriers, 
+                                         ret_date=ret_date, 
+                                         ret_place=ret_place, 
+                                         ret_iata=ret_iata, 
+                                         ret_carriers=ret_carriers, 
+                                         cache_date=cache_date
+                                         )
+                    if ret_place in cache_results:
+                        cache_results[ret_place].append(advencha)
+                    else:
+                        cache_results[ret_place] = [advencha]
             i += 1
         return cache_results
 

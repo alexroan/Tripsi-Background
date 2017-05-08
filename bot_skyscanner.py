@@ -20,7 +20,7 @@ class BotSkyscanner:
 		self.latest_ret_time='23:30'
 		self.max_price_pp=200.0
 		self.adults=1
-		self.weeks_ahead=8
+		self.weeks_ahead=12
 
 	def browse_origin(self, origin_key, currency):
 		print("Search with origin %s" % origin_key)
