@@ -1,4 +1,5 @@
 from lxml import etree
+from datetime import datetime
 
 class BotEmailParser:
 
@@ -37,8 +38,13 @@ class BotEmailParser:
 			xp = "//p[@id = 'location-%s-text']" % str(count)
 			find = etree.XPath(xp)
 			location_text = find(tree)[0]
-			#TODO display the dates of the advencha
-			location_text.text = "%s to %s" % (str(advencha.departure_date).split('T')[0], str(advencha.return_date).split('T')[0])
+			
+			dept_date = datetime.strptime(advencha.departure_date, "%Y-%m-%dT%H:%M:%S")
+			dept_string = dept_date.strftime("%A %d-%b-%y")
+			ret_date = datetime.strptime(advencha.return_date, "%Y-%m-%dT%H:%M:%S")
+			ret_string = ret_date.strftime("%A %d-%b-%y")
+
+			location_text.text = "%s to %s" % (dept_string, ret_string)
 			xp = "//a[@id = 'location-%s-button']" % str(count)
 			find = etree.XPath(xp)
 			location_button = find(tree)[0]

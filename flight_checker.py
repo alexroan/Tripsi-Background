@@ -5,7 +5,8 @@ Created on 26 Sep 2016
 '''
 from skyscanner.skyscanner import Flights, FlightsCache, Hotels
 from flight_classes import CacheAdventure, FlightItinerary
-import datetime, operator
+import operator
+from datetime import datetime, timedelta
 
 class FlightChecker:
     
@@ -118,8 +119,10 @@ class FlightChecker:
                 ret_iata = ret_place_details[1]
                 ret_carriers = self.get_carrier_names(carriers, ret)
                 
-                #check that the return location is correct and flights are direct
-                if search_params.origin == dept_iata and direct == True:
+                datetime_now = datetime.now()
+                cache_datetime = datetime.strptime(cache_date, "%Y-%m-%dT%H:%M:%S")
+                #check that the return location is correct and flights are direct and the cache date is less than 24 hours ago
+                if search_params.origin == dept_iata and direct == True and (datetime_now - cache_datetime) < timedelta(1):
                     advencha = CacheAdventure(
                                          price=price, 
                                          direct=direct, 
