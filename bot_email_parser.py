@@ -52,6 +52,16 @@ class BotEmailParser:
 			location_button.attrib['href'] = url
 			location_button.text = "%s%s" % (currency_symbol, str(advencha.price))
 			count = count + 1
+
+		#hide the unused tiles from the email	
+		count2 = 3
+		while count2 > count - 1:
+			xp = "//table[@id = 'location-%s-table']" % str(count2)
+			find = etree.XPath(xp)
+			location_table = find(tree)[0]
+			hidden_style = "display: none; visibility: hidden;";
+			location_table.attrib['style'] = hidden_style
+			count2 = count2 - 1
 		
 		return etree.tostring(tree, encoding="ascii", pretty_print=True, method="html")
 
