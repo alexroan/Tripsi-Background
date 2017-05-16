@@ -1,7 +1,7 @@
 from bot_mailchimp import BotMailChimp
 from bot_skyscanner import BotSkyscanner
 from bot_email_parser import BotEmailParser
-import time, json, io
+import time, json, io, os
 
 chimp = BotMailChimp()
 origins = chimp.get_origins_subscriptions()
@@ -21,6 +21,9 @@ for airport in origins:
 		advenchas = scanner.browse_origin(airport, currency)
 		if advenchas is not None:
 			email_result = email_parser.construct_email(airport, currency, advenchas, skyscanner_api_key_16)
-			file = open('emails/%s%s.html' % (airport, currency), "w")
+			directory = 'emails'
+			if not os.path.exists(directory):
+				os.makedirs(directory)
+			file = open('%s/%s%s.html' % (directory, airport, currency), "w")
 			file.write(email_result.decode("utf-8"))
 			file.close()
