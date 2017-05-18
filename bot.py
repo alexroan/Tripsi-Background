@@ -2,7 +2,7 @@ from bot_mailchimp import BotMailChimp
 from bot_skyscanner import BotSkyscanner
 from bot_email_parser import BotEmailParser
 from bot_sendgrid import EmailSender
-import time, json, io, os
+import time, json, io, os, datetime
 
 chimp = BotMailChimp()
 origins = chimp.get_origins_subscriptions()
@@ -11,6 +11,7 @@ if origins is None:
 	print('Exiting')
 	quit()
 
+current_time = str(datetime.datetime.now())
 advenchas = []
 scanner = BotSkyscanner()
 
@@ -27,12 +28,13 @@ for airport in origins:
 			email_result = email_parser.construct_email(airport, currency, advenchas, skyscanner_api_key_16)
 			
 			#print email to a file
-			directory = 'emails'
+			directory = 'emails-%s' % current_time
 			if not os.path.exists(directory):
 				os.makedirs(directory)
 			file = open('%s/%s%s.html' % (directory, airport, currency), "w")
 			file.write(email_result.decode("utf-8"))
 			file.close()
+			
 			
 			for email_address in origins[airport][currency]:
 				#send email to test address
